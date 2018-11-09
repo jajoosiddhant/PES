@@ -10,6 +10,7 @@ RM := rm -rf
 -include sources.mk
 -include utilities/subdir.mk
 -include startup/subdir.mk
+-include src/subdir.mk
 -include source/subdir.mk
 -include board/subdir.mk
 -include subdir.mk

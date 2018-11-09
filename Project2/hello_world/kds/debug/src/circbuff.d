@@ -1,7 +1,4 @@
-source/main.o: \
- C:/Freescale/KSDK_1.3.0/examples/frdmkl25z/demo_apps/hello_world/main.c \
- C:\Freescale\KSDK_1.3.0\examples\frdmkl25z\demo_apps\hello_world\kds\src/main.h \
- C:\Freescale\KSDK_1.3.0\examples\frdmkl25z\demo_apps\hello_world\kds\src/circbuff.h \
+src/circbuff.o: ../src/circbuff.c ../src/main.h ../src/circbuff.h \
  ../../../../board.h ../../../../pin_mux.h ../../../../gpio_pins.h \
  ../../../../../../platform/drivers/inc/fsl_gpio_driver.h \
  ../../../../../../platform/hal/inc/fsl_port_hal.h \
@@ -20,9 +17,9 @@ source/main.o: \
  ../../../../../../platform/osa/inc/fsl_os_abstraction.h \
  ../../../../../../platform/osa/inc/fsl_os_abstraction_bm.h
 
-C:\Freescale\KSDK_1.3.0\examples\frdmkl25z\demo_apps\hello_world\kds\src/main.h:
+../src/main.h:
 
-C:\Freescale\KSDK_1.3.0\examples\frdmkl25z\demo_apps\hello_world\kds\src/circbuff.h:
+../src/circbuff.h:
 
 ../../../../board.h:
 

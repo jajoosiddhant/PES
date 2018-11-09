@@ -32,71 +32,64 @@
 //  Includes
 ///////////////////////////////////////////////////////////////////////////////
 // SDK Included Files
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "main.h"
+#include "circbuff.h"
+
+
+#ifdef KDS
 #include "board.h"
-#include "fsl_lptmr_driver.h"
 #include "fsl_debug_console.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-// Timer period: 500000uS
-#define TMR_PERIOD         500000U
-#if defined(TWR_KV46F150M)
-#define LPTMR0_IDX LPTMR_IDX
-#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Code
 ////////////////////////////////////////////////////////////////////////////////
-/*!
- * @brief LPTMR interrupt call back function.
- * The function is used to toggle LED1.
- */
-void lptmr_call_back(void)
-{
-    // Toggle LED1
-    LED1_TOGGLE;
-}
 
-/*!
- * @brief Main function
- */
+
+// * @brief Main function
+
 int main (void)
 {
-    // RX buffers
-    //! @param receiveBuff Buffer used to hold received data
-    uint8_t receiveBuff;
+	// Initialize standard SDK demo application pins
+	hardware_init();
 
-    // LPTMR configurations
-    lptmr_user_config_t lptmrConfig =
-    {
-        .timerMode = kLptmrTimerModeTimeCounter,
-        .freeRunningEnable = false,
-        .prescalerEnable = true,
-        .prescalerClockSource = kClockLptmrSrcLpoClk,
-        .prescalerValue = kLptmrPrescalerDivide2,
-        .isInterruptEnabled = true,
-    };
-    // LPTMR driver state information
-    lptmr_state_t lptmrState;
-
-    // Initialize standard SDK demo application pins
-    hardware_init();
-
-    // Initialize LPTMR
-    LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &lptmrConfig);
-    // Set timer period for TMR_PERIOD seconds
-    LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, TMR_PERIOD);
-    // Install interrupt call back function for LPTMR
-    LPTMR_DRV_InstallCallback(LPTMR0_IDX, lptmr_call_back);
-    // Start LPTMR
-    LPTMR_DRV_Start(LPTMR0_IDX);
-
-    // Initialize LED1
-    LED1_EN;
+	count = 0;
 
     // Print the initial banner
-    PRINTF("\r\nHello World!\r\n\r\n");
+    printf("\r\nHello World!\r\n\r\n");
+
+    circbuff *SMA = circbuff_init(elements);
+
+    printf("Size of Structure : %d\r\n", sizeof(circbuff));
+    printf("Starting Memory Address : %x\r\n", SMA);
+    printf("Starting Buffer Memory Address : %x\r\n", SMA->buffer);
+    printf("Length : %d\r\n", SMA->length);
+    printf("Head : %d\r\n", SMA->head);
+    printf("Tail : %d\r\n", SMA->tail);
+    printf("Full Status : %d\r\n", SMA->full_status);
+
+    push(SMA,1);
+    push(SMA,2);
+    push(SMA,3);
+
+    printf("******************************\r\n");
+
+    pop(SMA);
+    pop(SMA);
+    pop(SMA);
+
+    push(SMA,10);
+    circbuff_free(SMA);
 
     while(1)
     {
@@ -109,3 +102,4 @@ int main (void)
         PUTCHAR(receiveBuff);
     }
 }
+

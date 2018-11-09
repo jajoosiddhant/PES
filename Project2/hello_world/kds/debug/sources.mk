@@ -16,6 +16,7 @@ S_UPPER_DEPS :=
 SUBDIRS := \
 utilities \
 startup \
+src \
 source \
 board \
 
