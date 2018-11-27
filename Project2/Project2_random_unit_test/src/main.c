@@ -35,19 +35,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <math.h>
 
 #include "main.h"
 #include "circbuff.h"
-#include "uart.h"
 
 
 #ifdef KDS
 #include "board.h"
-//#include "fsl_debug_console.h"
-#else
-#include <stdio.h>
+#include "fsl_debug_console.h"
 #endif
 
 
@@ -60,94 +55,56 @@
 // Code
 ////////////////////////////////////////////////////////////////////////////////
 
-void calc_prime(void);
-
-void calc_prime(void)
-{
-	int i, number, ct;
-	j=0;
-	for(number= 1; number <= total_char; number++)
-	{
-		ct = 0;
-		for (i = 2; i <= number/2; i++)
-		{
-			if(number%i == 0)
-			{
-				ct++;
-				break;
-			}
-		}
-		if(ct == 0 && number != 1 )
-		{
-			arr[j] = number;
-			j++;
-		}
-	}
-}
-
-
 
 // * @brief Main function
 
 int main (void)
 {
-#ifdef KDS
+	#ifdef KDS
 	// Initialize standard SDK demo application pins
 	hardware_init();
-#endif
-	count = 0;
-	resize_flag = 0;
-	total_char = 0;
-	input_size = 100;
-	uart_init();
+	#endif
 
-    LED2_EN;
-    SMA = circbuff_init(input_size); //initializing circular buffer
+	count = 0;
 
     // Print the initial banner
-    myprintf("\r\nHello World!\r\n");
+    printf("\r\nHello World!\r\n\r\n");
+
+    circbuff *SMA = circbuff_init(ELEMENTS);
+
+    printf("Size of Structure : %d\r\n", sizeof(circbuff));
+    printf("Starting Memory Address : %x\r\n", SMA);
+    printf("Starting Buffer Memory Address : %x\r\n", SMA->buffer);
+    printf("Length : %d\r\n", SMA->length);
+    printf("Head : %d\r\n", SMA->head);
+    printf("Tail : %d\r\n", SMA->tail);
+    printf("Full Status : %d\r\n", SMA->full_status);
+
+    push(SMA,1);
+    push(SMA,2);
+    push(SMA,3);
+
+    printf("******************************\r\n");
+
+    pop(SMA);
+    pop(SMA);
+    pop(SMA);
+
+    push(SMA,10);
+    circbuff_free(SMA);
 
     while(1)
     {
-//    	calc_prime();
 
-    	if (resize_flag == 1)
-    	{
-    		resize_buffer();
-    		resize_flag = 0;
-    		UART0_C2 |= UART0_C2_RIE_MASK;
-    	}
-    	else if (buffer_size(SMA)!=0)
-    	{
-    		if (rx_data == 27)
-    		{
-    			resize_flag = 1;
-    			UART0_C2 &=~ UART0_C2_RIE_MASK;
-    		}
-    		else
-    		{
-//    			UART0_C2|=UART0_C2_TIE_MASK;
-    		}
-    	}
-    	if (tx_flag == 1)
-    	{
-    		__disable_irq();
-    		tx_flag = 0;
-    		__enable_irq();
-    		while (buffer_size(SMA)!=0)
-    		{
-    			total_char++;
-    			rx_data = pop(SMA);
-    			myprintf("\r\n********************************");
-    			myprintf("\r\n=>%c", rx_data);
-    			report(rx_data);
-    			myprintf(" Prime Numbers till %d: \r\n", total_char);
-    			calc_prime();
-    			for(int k = 0; k<j; k++)
-    			{
-    				myprintf(" %d \r\n", arr[k]);
-    			}
-    		}
-    	}
+#ifdef KDS
+        // Main routine that simply echoes received characters forever
+
+        // First, get character
+        receiveBuff = GETCHAR();
+
+        // Now echo the received character
+        PUTCHAR(receiveBuff);
+#endif    
     }
 }
+
