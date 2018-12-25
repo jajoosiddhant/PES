@@ -1,4 +1,4 @@
-# PROGRAMMABLE EMBEDDED SYSTEMS
+# PRINCIPLES OF EMBEDDED SOFTWARE
 
 Projects completed under Prof. Kevin Gross in Principles of Embedded Software Course.
 Each Project consists of a readme file describing about the Project.
