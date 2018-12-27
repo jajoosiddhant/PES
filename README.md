@@ -3,5 +3,5 @@
 Each Project consists of a readme file describing about the Project.
 
 Project Members:
-                1) Satya Mehta
-                2) Siddhant Jajoo
+                1) Siddhant Jajoo
+                2) Satya Mehta
