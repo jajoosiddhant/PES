@@ -1,3 +1,3 @@
 # Principles of Embedded Software
 
-This Project is the sanme as Project1_linux but ported to work in KDS.
+This Project is the same as Project1_linux but ported to work in KDS.
